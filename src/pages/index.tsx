@@ -1,14 +1,31 @@
-import IcecastMetadataPlayer from "icecast-metadata-player";
+import IcecastMetadataPlayer, { IcyMetadata } from "icecast-metadata-player";
 import { NextPage } from "next";
+import { useState, useEffect } from "react";
 
 const MyComponent = () => {
-  if (typeof window !== "undefined") {
-    const player = new IcecastMetadataPlayer(
-      "https://dsmrad.io/stream/isics-all",
+  const [player, setPlayer] = useState<IcecastMetadataPlayer>() as [
+    IcecastMetadataPlayer,
+    any,
+  ];
+  const [metadata, setMetadata] = useState<string>();
+
+  useEffect(() => {
+    setPlayer(
+      new IcecastMetadataPlayer("https://dsmrad.io/stream/isics-all", {
+        onMetadata: (metadata: IcyMetadata) => {
+          setMetadata(metadata.StreamTitle);
+        },
+      }),
     );
-    console.log(player.audioElement);
-  }
-  return <div>I compile eventually, but I throw an error</div>;
+  }, []);
+
+  return (
+    <>
+      <button onClick={() => player.play()}>Play</button>
+      <button onClick={() => player.stop()}>Stop</button>
+      <div>{metadata}</div>
+    </>
+  );
 };
 
 const Home: NextPage<Record<string, never>> = () => <MyComponent />;
