@@ -11,7 +11,7 @@
     "build:export": "npm run build && next export"
   },
   "engines": {
-    "node": "15.14.0"
+    "node": "14.16.1"
   },
   "dependencies": {
     "icecast-metadata-player": "1.3.1",
